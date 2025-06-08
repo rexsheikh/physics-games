@@ -1,0 +1,19 @@
+.navbar { 
+    background-color: cadetblue;
+    padding: 1rem 2rem; 
+    display: flex;
+    gap:1.5rem;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.navbar a { 
+    text-decoration: none;
+    color: blue;
+    font-weight: 500;
+    transition: color 0.2s ease-in-out;
+}
+
+.navbar a:hover { 
+    color:#007bff;
+}
