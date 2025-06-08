@@ -5,9 +5,9 @@ function Navbar() {
   return (
     <nav style={{ padding: '1rem', background: '#ddd' }}>
       <Link to="/" style={{ marginRight: '1rem' }}>Home</Link>
-      <Link to="/DemoPage">Demos</Link>
-      <Link to="/GamesPage">Games</Link>
-      <Link to="/User Stats">Games</Link>
+      <Link to="/demos">Demos</Link>
+      <Link to="/games">Games</Link>
+      <Link to="/user-stats">User Stats</Link>
     </nav>
   );
 }
