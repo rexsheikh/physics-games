@@ -5,7 +5,18 @@ function NewtonsCradle() {
   const sceneRef = useRef(null);
 
   useEffect(() => {
-    const { Engine, Render, Runner, World, Bodies, Constraint, Mouse, MouseConstraint } = Matter;
+    const {
+      Engine,
+      Render,
+      Runner,
+      World,
+      Composite,
+      Bodies,
+      Constraint,
+      Mouse,
+      MouseConstraint,
+      Body
+    } = Matter;
 
     // Create engine and world
     const engine = Engine.create();
@@ -18,54 +29,61 @@ function NewtonsCradle() {
     // Create renderer
     const render = Render.create({
       element: sceneRef.current,
-      engine: engine,
+      engine,
       options: {
         width,
         height,
         wireframes: false,
         background: '#f0f0f0',
+        showVelocity: true,
       },
     });
 
-    // Cradle setup
-    const ballRadius = 20;
-    const cradleX = width / 2;
-    const cradleY = 100;
-    const spacing = ballRadius * 2.0;
-    const count = 5;
+    Render.run(render);
 
-    const balls = [];
+    const runner = Runner.create();
+    Runner.run(runner, engine);
 
-    for (let i = 0; i < count; i++) {
-      const x = cradleX + (i - (count - 1) / 2) * spacing;
-      const y = cradleY + 150;
+    // Helper function: cradle factory
+    function createCradle(xx, yy, count, radius, length) {
+      const cradle = Composite.create({ label: 'Newtons Cradle' });
+      const separation = radius * 1.9;
 
-      const ball = Bodies.circle(x, y, ballRadius, {
-        restitution: 1,
-        friction: 0,
-        frictionAir: 0,
-        slop: 0,
-        inertia: Infinity,
-        render: {
-          fillStyle: '#2c3e50',
-        },
-      });
+      for (let i = 0; i < count; i++) {
+        const x = xx + i * separation;
+        const y = yy + length;
 
-      const constraint = Constraint.create({
-        pointA: { x, y: cradleY },
-        bodyB: ball,
-        length: 150,
-        stiffness: 1,
-      });
+        const ball = Bodies.circle(x, y, radius, {
+          inertia: Infinity,
+          restitution: 1,
+          friction: 0,
+          frictionAir: 0,
+          slop: 0,
+          render: { fillStyle: '#2c3e50' },
+        });
 
-      balls.push(ball);
-      World.add(world, [ball, constraint]);
+        const constraint = Constraint.create({
+          pointA: { x, y: yy },
+          bodyB: ball,
+          length,
+          stiffness: 1,
+        });
+
+        Composite.addBody(cradle, ball);
+        Composite.addConstraint(cradle, constraint);
+      }
+
+      return cradle;
     }
 
-    // Apply an initial kick to the first ball
-    Matter.Body.setVelocity(balls[0], { x: -5, y: -5 });
+    // Create and add cradle to the world
+    const cradle = createCradle(200, 80, 4, 20, 150);
+    Composite.add(world, cradle);
 
-    // Add optional mouse control
+    // Apply initial motion
+    Body.translate(cradle.bodies[0], { x: -100, y: -100 });
+
+    // Mouse control
     const mouse = Mouse.create(render.canvas);
     const mouseConstraint = MouseConstraint.create(engine, {
       mouse,
@@ -74,15 +92,17 @@ function NewtonsCradle() {
         render: { visible: false },
       },
     });
-    World.add(world, mouseConstraint);
+
+    Composite.add(world, mouseConstraint);
     render.mouse = mouse;
 
-    // Run the engine and renderer using Runner (not deprecated)
-    const runner = Runner.create();
-    Runner.run(runner, engine);
-    Render.run(render);
+    // Viewport fit (optional)
+    Render.lookAt(render, {
+      min: { x: 0, y: 0 },
+      max: { x: width, y: height },
+    });
 
-    // Cleanup on unmount
+    // Cleanup
     return () => {
       Render.stop(render);
       Runner.stop(runner);
