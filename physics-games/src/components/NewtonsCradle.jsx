@@ -9,6 +9,7 @@ function NewtonsCradle() {
 
     // Create engine and world
     const engine = Engine.create();
+    engine.constraintIterations = 10;
     const world = engine.world;
 
     const width = 600;
@@ -30,7 +31,7 @@ function NewtonsCradle() {
     const ballRadius = 20;
     const cradleX = width / 2;
     const cradleY = 100;
-    const spacing = ballRadius * 2.2;
+    const spacing = ballRadius * 2.0;
     const count = 5;
 
     const balls = [];
@@ -42,7 +43,8 @@ function NewtonsCradle() {
       const ball = Bodies.circle(x, y, ballRadius, {
         restitution: 1,
         friction: 0,
-        frictionAir: 0.0001,
+        frictionAir: 0,
+        slop: 0,
         inertia: Infinity,
         render: {
           fillStyle: '#2c3e50',
