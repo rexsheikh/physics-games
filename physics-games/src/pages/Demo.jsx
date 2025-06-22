@@ -2,7 +2,6 @@ import Navbar from '../components/Navbar';
 function Demo() {
   return (
     <>
-      <Navbar />
       <div>Demos</div>
     </>
   );
