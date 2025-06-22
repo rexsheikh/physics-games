@@ -1,23 +1,18 @@
-// src/App.js
-
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Demo from './pages/Demo';
 import Arcade from './pages/Arcade';
+import HighScores from './pages/HighScores';
+import Navbar from './components/Navbar';
 
 function App() {
   return (
     <Router>
       <div>
-        <nav>
-          <ul>
-            <li><Link to="/demo">Demo</Link></li>
-            <li><Link to="/arcade">Arcade</Link></li>
-          </ul>
-        </nav>
-
+        <Navbar />
         <Routes>
-          <Route path="/demo" element={<Demo />} />
+          <Route path="/demos" element={<Demo />} />
           <Route path="/arcade" element={<Arcade />} />
+          <Route path="/high-scores" element={<HighScores />} />
         </Routes>
       </div>
     </Router>

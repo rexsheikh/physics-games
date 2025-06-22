@@ -1,6 +1,11 @@
+import Navbar from '../components/Navbar';
 function Arcade() {
-    return <div>Arcade Page</div>;
-  }
+  return (
+    <>
+      <Navbar />
+      <div>Arcade</div>
+    </>
+  );  }
   
   export default Arcade;
   

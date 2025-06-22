@@ -1,12 +1,12 @@
 import Navbar from '../components/Navbar';
-function Demo() {
+
+function HighScores() {
   return (
     <>
       <Navbar />
-      <div>Demos</div>
+      <div>High Scores</div>
     </>
   );
-  }
-  
-  export default Demo;
-  
+}
+
+export default HighScores;
